@@ -8,6 +8,7 @@
 	<window fps="60" background="0x000000"/>
     <window resizable="true" unless="mobile" background="0x000000"/>
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp"/>
+    <window allow-high-dpi="false" />
 
 	<source path="source"/>
 
