@@ -8,7 +8,7 @@
   "directoryDepth": 5,
   "layerGridDefaultSize": {"x": 10, "y": 10},
   "levelDefaultSize": {"x": 320, "y": 240},
-  "levelMinSize": {"x": 320, "y": 180},
+  "levelMinSize": {"x": 80, "y": 180},
   "levelMaxSize": {"x": 3200, "y": 1800},
   "levelValues": [],
   "defaultExportMode": ".json",

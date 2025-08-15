@@ -7,13 +7,13 @@ import haxepunk.masks.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import haxepunk.utils.*;
 import scenes.*;
 
 class Player extends Entity
 {
-    public static inline var MIN_SPEED = 50;
+    public static inline var MIN_SPEED = 37.5;
     public static inline var MAX_SPEED = 150;
-    public static inline var DECEL = 1000;
     public static inline var GRAVITY = 800;
     public static inline var MAX_JUMP_POWER = 400;
     public static inline var MIN_JUMP_POWER = 100;
@@ -33,7 +33,10 @@ class Player extends Entity
         mask = new Hitbox(10, 10);
         sprite = new Spritemap("graphics/player.png", 10, 10);
         sprite.add("idle", [0]);
+        sprite.add("charge", [1, 0], 12);
         sprite.play("idle");
+        sprite.y = 10;
+        sprite.originY = 10;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
@@ -54,17 +57,13 @@ class Player extends Entity
             movement();
         }
         collisions();
+        animation();
         super.update();
     }
 
     private function movement() {
         if(isOnGround()) {
-            velocity.x = MathUtil.approach(
-                velocity.x, 0, DECEL * HXP.elapsed
-            );
-        }
-
-        if(isOnGround()) {
+            velocity.x = 0;
             velocity.y = 0;
             if(Input.pressed("jump")) {
                 canJump = true;
@@ -76,12 +75,12 @@ class Player extends Entity
                 velocity.x = MathUtil.lerp(
                     MIN_SPEED,
                     MAX_SPEED,
-                    Math.min(timeJumpHeld, 1)
+                    Math.min(timeJumpHeld, MAX_JUMP_POWER_HOLD_TIME)
                 );
                 velocity.y = MathUtil.lerp(
                     -MIN_JUMP_POWER,
                     -MAX_JUMP_POWER,
-                    Math.min(timeJumpHeld, 1)
+                    Math.min(timeJumpHeld, MAX_JUMP_POWER_HOLD_TIME)
                 );
                 timeJumpHeld = 0;
             }
@@ -107,8 +106,25 @@ class Player extends Entity
     }
 
     private function collisions() {
-        if(collide("hazard", x, y) != null) {
+        if(y > GameScene.GAME_HEIGHT) {
             die();
+        }
+        else if(collide("hazard", x, y) != null) {
+            die();
+        }
+    }
+
+    private function animation() {
+        sprite.scaleY = MathUtil.lerp(
+            1,
+            0.5,
+            Ease.cubeOut(Math.min(timeJumpHeld, MAX_JUMP_POWER_HOLD_TIME))
+        );
+        if(timeJumpHeld >= MAX_JUMP_POWER_HOLD_TIME) {
+            sprite.play("charge");
+        }
+        else {
+            sprite.play("idle");
         }
     }
 

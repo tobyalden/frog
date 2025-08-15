@@ -16,6 +16,7 @@ class GameScene extends Scene
 {
     public static inline var GAME_WIDTH = 320;
     public static inline var GAME_HEIGHT = 180;
+    public static inline var NUMBER_OF_CHUNK_TYPES = 6;
 
     private var curtain:Curtain;
     private var player:Player;
@@ -57,7 +58,7 @@ class GameScene extends Scene
     }
 
     private function addChunk() {
-        var chunk = new Level("0");
+        var chunk = new Level('${Random.randInt(NUMBER_OF_CHUNK_TYPES)}');
         chunk.x = getTotalChunkWidth();
         chunks.push(chunk);
         add(chunk);
