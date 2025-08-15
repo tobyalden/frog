@@ -28,7 +28,7 @@
     {
       "definition": "entity",
       "name": "entities",
-      "gridSize": {"x": 5, "y": 5},
+      "gridSize": {"x": 10, "y": 10},
       "exportID": "42418946",
       "requiredTags": [],
       "excludedTags": []
@@ -116,6 +116,42 @@
           "defaults": 0
         }
       ]
+    },
+    {
+      "exportID": "29378295",
+      "name": "optionalSolid",
+      "limit": -1,
+      "size": {"x": 10, "y": 10},
+      "origin": {"x": 0, "y": 0},
+      "originAnchored": true,
+      "shape": {
+        "label": "Rectangle",
+        "points": [
+          {"x": -1, "y": -1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": -1},
+          {"x": -1, "y": 1},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "color": "#ff0000ff",
+      "tileX": false,
+      "tileY": false,
+      "tileSize": {"x": 16, "y": 16},
+      "resizeableX": true,
+      "resizeableY": true,
+      "rotatable": false,
+      "rotationDegrees": 360,
+      "canFlipX": false,
+      "canFlipY": false,
+      "canSetColor": false,
+      "hasNodes": false,
+      "nodeLimit": 0,
+      "nodeDisplay": 0,
+      "nodeGhost": true,
+      "tags": [],
+      "values": []
     }
   ],
   "tilesets": []
