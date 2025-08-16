@@ -21,12 +21,15 @@ class Player extends Entity
     public static inline var MAX_FALL_SPEED = 400;
     public static inline var SPAWN_PAUSE = 0.1;
 
+    public static var solids = ["walls", "platform"];
+
     public var isDead(default, null):Bool;
     private var sprite:Spritemap;
     private var velocity:Vector2;
     private var canMove:Bool;
     private var canJump:Bool;
     private var timeJumpHeld:Float;
+    //private var wasOnGround:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -46,6 +49,7 @@ class Player extends Entity
             canMove = true;
         });
         timeJumpHeld = 0;
+        //wasOnGround = false;
     }
 
     override public function update() {
@@ -63,6 +67,10 @@ class Player extends Entity
 
     private function movement() {
         if(isOnGround()) {
+            //if(!wasOnGround) {
+                //cast(scene, GameScene).updateCamera();
+            //}
+            //wasOnGround = true;
             velocity.x = 0;
             velocity.y = 0;
             if(Input.pressed("jump")) {
@@ -86,6 +94,7 @@ class Player extends Entity
             }
         }
         else {
+            //wasOnGround = false;
             canJump = false;
             timeJumpHeld = 0;
         }
@@ -101,7 +110,7 @@ class Player extends Entity
         moveBy(
             velocity.x * HXP.elapsed,
             velocity.y * HXP.elapsed,
-            ["walls"]
+            Player.solids
         );
     }
 
@@ -177,7 +186,17 @@ class Player extends Entity
         return true;
     }
 
-    private function isOnGround() {
-        return collide("walls", x, y + 1) != null;
+    private function collideAny(types:Array<String>, virtualX:Float, virtualY:Float) {
+        for(collideType in types) {
+            var collided = collide(collideType, virtualX, virtualY);
+            if(collided != null) {
+                return collided;
+            }
+        }
+        return null;
+    }
+
+    public function isOnGround() {
+        return collideAny(Player.solids, x, y + 1) != null;
     }
 }

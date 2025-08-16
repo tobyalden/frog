@@ -48,7 +48,7 @@ class Level extends Entity
                     if(entity.name == "player") {
                         entities.push(new Player(entity.x, entity.y));
                     }
-                    if(entity.name == "optionalSolid") {
+                    else if(entity.name == "optionalSolid") {
                         if(Random.random < 0.5) {
                             var tileStartX = Std.int(entity.x / TILE_SIZE);
                             var tileStartY = Std.int(entity.y / TILE_SIZE);
@@ -61,16 +61,38 @@ class Level extends Entity
                             }
                         }
                     }
-                    if(entity.name == "spike") {
+                    else if(entity.name == "spike") {
                         entities.push(new Spike(
                             entity.x, entity.y,
                             entity.width, entity.height,
                             entity.values.orientation
                         ));
                     }
+                    else if(entity.name == "movingPlatform") {
+                        entities.push(new MovingPlatform(
+                            entity.x, entity.y,
+                            entity.width, entity.height,
+                            getPathNodes(entity, entity.nodes)
+                        ));
+                    }
                 }
             }
         }
+    }
+
+    private function getPointNodes(entity:Dynamic, nodes:Dynamic) {
+        var pointNodes = new Array<Vector2>();
+        for(i in 0...entity.nodes.length) {
+            pointNodes.push(new Vector2(entity.nodes[i].x, entity.nodes[i].y));
+        }
+        return pointNodes;
+    }
+
+    private function getPathNodes(entity:Dynamic, nodes:Dynamic) {
+        var pathNodes = getPointNodes(entity, nodes);
+        pathNodes.insert(0, new Vector2(entity.x, entity.y));
+        pathNodes.push(new Vector2(entity.x, entity.y));
+        return pathNodes;
     }
 
     public function updateGraphic() {

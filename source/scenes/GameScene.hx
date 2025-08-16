@@ -16,10 +16,10 @@ class GameScene extends Scene
 {
     public static inline var GAME_WIDTH = 320;
     public static inline var GAME_HEIGHT = 180;
-    public static inline var NUMBER_OF_CHUNK_TYPES = 6;
+    public static inline var NUMBER_OF_CHUNK_TYPES = 9;
 
+    public var player(default, null):Player;
     private var curtain:Curtain;
-    private var player:Player;
     private var chunks:Array<Level>;
 
     override public function begin() {
@@ -36,6 +36,8 @@ class GameScene extends Scene
             add(entity);
         }
         chunks = [start];
+
+        camera.x = player.centerX - GAME_WIDTH / 2;
     }
 
     override public function update() {
@@ -62,6 +64,13 @@ class GameScene extends Scene
         chunk.x = getTotalChunkWidth();
         chunks.push(chunk);
         add(chunk);
+        for(entity in chunk.entities) {
+            entity.x += chunk.x;
+            if(Type.getClass(entity) == MovingPlatform) {
+                cast(entity, MovingPlatform).shiftPathPointsX(chunk.x);
+            }
+            add(entity);
+        }
     }
 
     public function onDeath() {
